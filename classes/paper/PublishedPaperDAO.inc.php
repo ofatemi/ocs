@@ -445,7 +445,7 @@ class PublishedPaperDAO extends DAO {
 	 */
 	function &getPublishedPaperByBestPaperId($schedConfId, $paperId, $previewAbstracts = null) {
 		$paper =& $this->getPublishedPaperByPublicPaperId($schedConfId, $paperId);
-		if (!isset($paper)) $paper =& $this->getPublishedPaperByPaperId((int) $paperId, $schedConfId, $previewAbstracts);
+		if (!isset($paper) && ctype_digit("$paperId")) $paper =& $this->getPublishedPaperByPaperId((int) $paperId, $schedConfId, $previewAbstracts);
 		return $paper;
 	}
 
@@ -479,8 +479,8 @@ class PublishedPaperDAO extends DAO {
 				LEFT JOIN paper_settings ptpl ON (ptpl.setting_name = ? AND ptpl.paper_id = p.paper_id AND ptpl.locale = ?)
 			WHERE	pp.paper_id = p.paper_id AND
 				p.status = ' . STATUS_PUBLISHED . '
-				' . ($schedConfId?'AND p.sched_conf_id = ?':'') . '
 				' . ($conferenceId?'AND sc.conference_id = ?':'') . '
+				' . ($schedConfId?'AND p.sched_conf_id = ?':'') . '
 			ORDER BY paper_title',
 			$params
 		);

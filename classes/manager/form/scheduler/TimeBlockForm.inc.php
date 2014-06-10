@@ -112,6 +112,10 @@ class TimeBlockForm extends Form {
 		$templateMgr->assign('schedConfStartDate', $schedConf->getSetting('startDate'));
 		$templateMgr->assign('schedConfEndDate', $schedConf->getSetting('endDate'));
 
+		import('classes.manager.form.TimelineForm');
+		list($earliestDate, $latestDate) = TimelineForm::getOutsideDates($schedConf);
+		$templateMgr->assign('firstYear', strftime('%Y', $earliestDate));
+		$templateMgr->assign('lastYear', strftime('%Y', $latestDate));
 		parent::display();
 	}
 
@@ -146,7 +150,7 @@ class TimeBlockForm extends Form {
 	}
 
 	/**
-	 * Save time block. 
+	 * Save time block.
 	 */
 	function execute() {
 		$timeBlockDao =& DAORegistry::getDAO('TimeBlockDAO');

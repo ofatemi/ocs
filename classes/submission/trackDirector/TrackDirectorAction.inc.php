@@ -884,7 +884,7 @@ class TrackDirectorAction extends Action {
 				$paperGalleyDao =& DAORegistry::getDAO('PaperGalleyDAO');
 				$galleys =& $paperGalleyDao->getGalleysByPaper($trackDirectorSubmission->getPaperId());
 				if (empty($galleys)) {
-					$layoutFile =& $paperFileDao->getPaperFile($newFileId, $revision);
+					$layoutFile =& $paperFileDao->getPaperFile($newFileId, 1);
 					$fileType = $layoutFile->getFileType();
 					$fileId = $paperFileManager->copyPublicFile($layoutFile->getFilePath(), $fileType);
 					if (strstr($fileType, 'html')) {
@@ -1371,7 +1371,7 @@ import('file.PaperFileManager');
 			// Send a notification to associated users
 			import('notification.NotificationManager');
 			$notificationManager = new NotificationManager();
-			$notificationUsers = $paper->getAssociatedUserIds();
+			$notificationUsers = $paper->getAssociatedUserIds(false, false);
 			foreach ($notificationUsers as $userRole) {
 				$url = Request::url(null, null, $userRole['role'], 'submissionReview', $paper->getId(), null, 'peerReview');
 				$notificationManager->createNotification(
